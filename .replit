@@ -1,4 +1,4 @@
-modules = ["nodejs-24", "postgresql-16"]
+modules = ["nodejs-24", "postgresql-16", "python-3.11"]
 
 [deployment]
 router = "application"
@@ -45,7 +45,7 @@ outputType = "console"
 
 [[workflows.workflow.tasks]]
 task = "shell.exec"
-args = "PORT=8080 NODE_ENV=development pnpm --filter @workspace/api-server run dev"
+args = "cd /home/runner/workspace/artifacts/api-server && /home/runner/workspace/.pythonlibs/bin/python3 run.py"
 waitForPort = 8080
 
 [agent]

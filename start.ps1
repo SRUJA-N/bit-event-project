@@ -1,60 +1,40 @@
-# ============================================================
-#  BIT Event Portal  —  Start the app
-#  Run this every time:  .\start.ps1
-# ============================================================
-
-if (-not (Test-Path ".env")) {
-    Write-Host "[ERROR] .env file not found. Run .\setup.ps1 first." -ForegroundColor Red
-    exit 1
-}
-
-# Read .env into current session
-Get-Content ".env" | ForEach-Object {
-    if ($_ -match "^\s*([^#][^=]*)\s*=\s*(.*)\s*$") {
-        [System.Environment]::SetEnvironmentVariable($matches[1].Trim(), $matches[2].Trim(), "Process")
-    }
-}
-
-$dbUrl    = $env:DATABASE_URL
-$jwtSec   = $env:JWT_SECRET
+Set-ExecutionPolicy -Scope Process -ExecutionPolicy Bypass -Force 2>$null
 
 Write-Host ""
-Write-Host "============================================" -ForegroundColor DarkYellow
-Write-Host "  BIT Event Portal  —  Starting..." -ForegroundColor Yellow
-Write-Host "============================================" -ForegroundColor DarkYellow
+Write-Host "============================================" -ForegroundColor Yellow
+Write-Host "  BIT Event Portal  -  Starting...        " -ForegroundColor Yellow
+Write-Host "============================================" -ForegroundColor Yellow
 Write-Host ""
 Write-Host "  Opening two terminal windows:" -ForegroundColor White
-Write-Host "    Window 1 — API server  (port 8080)" -ForegroundColor Gray
-Write-Host "    Window 2 — Frontend    (port 3000)" -ForegroundColor Gray
+Write-Host "    Window 1 - API server  (FastAPI on port 8080)" -ForegroundColor Gray
+Write-Host "    Window 2 - Frontend    (React on port 3000)" -ForegroundColor Gray
 Write-Host ""
 
-# Launch API server in a new PowerShell window
+# Start FastAPI backend
 Start-Process powershell -ArgumentList @(
     "-NoExit",
     "-Command",
-    "`$env:PORT='8080'; `$env:NODE_ENV='development'; `$env:DATABASE_URL='$dbUrl'; `$env:JWT_SECRET='$jwtSec'; Write-Host 'BIT API Server — port 8080' -ForegroundColor Cyan; pnpm --filter @workspace/api-server run dev"
+    "Set-Location '$PSScriptRoot\artifacts\api-server'; Write-Host 'BIT API Server - http://localhost:8080' -ForegroundColor Cyan; python -m uvicorn main:app --host 0.0.0.0 --port 8080 --reload"
 )
 
-# Give the API server a few seconds head start
 Start-Sleep -Seconds 3
 
-# Launch frontend in a new PowerShell window
+# Start React frontend
 Start-Process powershell -ArgumentList @(
     "-NoExit",
     "-Command",
-    "`$env:PORT='3000'; `$env:BASE_PATH='/'; Write-Host 'BIT Frontend — port 3000' -ForegroundColor Cyan; pnpm --filter @workspace/bit-events run dev"
+    "Set-Location '$PSScriptRoot'; `$env:PORT='3000'; `$env:BASE_PATH='/'; Write-Host 'BIT Frontend - http://localhost:3000' -ForegroundColor Cyan; pnpm --filter '@workspace/bit-events' run dev"
 )
 
-# Wait then open browser
 Start-Sleep -Seconds 5
 Start-Process "http://localhost:3000"
 
-Write-Host "  App is running at  http://localhost:3000" -ForegroundColor Green
+Write-Host "  App running at   http://localhost:3000" -ForegroundColor Green
+Write-Host "  API running at   http://localhost:8080" -ForegroundColor Green
 Write-Host ""
 Write-Host "  Demo logins (password: password123)" -ForegroundColor Yellow
 Write-Host "    Admin:   admin@bit.edu"
 Write-Host "    Faculty: faculty@bit.edu"
 Write-Host "    Student: arjun@student.bit.edu"
 Write-Host ""
-Write-Host "  Close the two PowerShell windows to stop the servers." -ForegroundColor Gray
-Write-Host ""
+Write-Host "  Close the two terminal windows to stop the servers." -ForegroundColor Gray
