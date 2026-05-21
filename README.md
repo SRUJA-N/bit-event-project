@@ -5,138 +5,70 @@ A full-stack College Event Management System for managing events, registrations,
 
 ---
 
-## Tech Stack
+## Quick Start (Windows — VS Code)
 
-| Layer | Technology |
+**One command does everything** — installs dependencies, sets up the database, seeds demo data, and launches the app.
+
+### Step 1 — Prerequisites (install once, skip if already done)
+
+| Tool | Download |
 |---|---|
-| Frontend | React + Vite, Tailwind CSS, Recharts |
-| Backend | Node.js + Express, TypeScript |
-| Database | PostgreSQL (via Drizzle ORM) |
-| Auth | JWT (jsonwebtoken) |
-| PDF Reports | PDFKit |
+| Node.js (LTS) | https://nodejs.org |
+| PostgreSQL | https://www.postgresql.org/download/windows/ |
+| pnpm | Installed automatically by the setup script |
 
----
+### Step 2 — Clone the project
 
-## Prerequisites
+Open VS Code, press **Ctrl + `** to open the terminal, then run:
 
-Install the following before running the project:
-
-- **Node.js** v18 or higher → https://nodejs.org
-- **pnpm** v8 or higher → `npm install -g pnpm`
-- **PostgreSQL** v14 or higher → https://www.postgresql.org/download/
-
-> On **Windows 11**: Use the PostgreSQL installer from the link above. During setup note the port (default 5432), username (default `postgres`), and password you set.
-
----
-
-## Setup Instructions
-
-### 1. Clone the Repository
-
-```bash
+```
 git clone https://github.com/SRUJA-N/bit-event-project.git
 cd bit-event-project
 ```
 
-### 2. Install Dependencies
+### Step 3 — Run setup (first time only)
 
-```bash
-pnpm install
+```
+Set-ExecutionPolicy -Scope Process -ExecutionPolicy Bypass
+.\setup.ps1
 ```
 
-### 3. Set Up the Database
+The script will:
+- Check Node.js and PostgreSQL are installed
+- Ask for your PostgreSQL password (just press Enter for defaults on everything else)
+- Create the database automatically
+- Install all dependencies
+- Create all tables
+- Load demo data (users, events, registrations, feedback)
+- Open the app in your browser
 
-Create a new PostgreSQL database:
+### Step 4 — Start the app (every time after that)
 
-```sql
--- Run in psql or pgAdmin
-CREATE DATABASE bit_events;
+```
+.\start.ps1
 ```
 
-### 4. Configure Environment Variables
-
-Create a `.env` file in the project root:
-
-```env
-DATABASE_URL=postgresql://postgres:YOUR_PASSWORD@localhost:5432/bit_events
-JWT_SECRET=your-secret-key-change-in-production
-```
-
-Replace `YOUR_PASSWORD` with your PostgreSQL password.
-
-> On **Windows 11** use `localhost` or `127.0.0.1` as the host.
-
-### 5. Push the Database Schema
-
-```bash
-pnpm --filter @workspace/db run push
-```
-
-This creates all required tables: `users`, `events`, `registrations`, `feedback`.
-
----
-
-## Running the Project
-
-Start **two terminals** — one for the API server, one for the frontend.
-
-### Terminal 1 — API Server (Port 8080)
-
-**Linux / macOS:**
-```bash
-PORT=8080 NODE_ENV=development pnpm --filter @workspace/api-server run dev
-```
-
-**Windows 11 — Command Prompt:**
-```cmd
-set PORT=8080 && set NODE_ENV=development && pnpm --filter @workspace/api-server run dev
-```
-
-**Windows 11 — PowerShell:**
-```powershell
-$env:PORT="8080"; $env:NODE_ENV="development"; pnpm --filter @workspace/api-server run dev
-```
-
-### Terminal 2 — Frontend (Port 3000)
-
-**Linux / macOS:**
-```bash
-PORT=3000 BASE_PATH=/ pnpm --filter @workspace/bit-events run dev
-```
-
-**Windows 11 — Command Prompt:**
-```cmd
-set PORT=3000 && set BASE_PATH=/ && pnpm --filter @workspace/bit-events run dev
-```
-
-**Windows 11 — PowerShell:**
-```powershell
-$env:PORT="3000"; $env:BASE_PATH="/"; pnpm --filter @workspace/bit-events run dev
-```
-
-### Open in Browser
-
-**http://localhost:3000**
+This opens both servers and launches the browser automatically.
 
 ---
 
 ## Demo Login Credentials
 
-All demo accounts use the password: **`password123`**
+All accounts use the password: **`password123`**
 
-| Role | Email | Access |
+| Role | Email | What you can do |
 |---|---|---|
-| Admin | `admin@bit.edu` | Dashboard, Analytics, Reports, Approval |
+| Admin | `admin@bit.edu` | Dashboard, Analytics, Reports, Approve Events |
 | Faculty | `faculty@bit.edu` | Create Events, Review Registrations |
-| Student | `arjun@student.bit.edu` | Browse, Register, Feedback |
+| Student | `arjun@student.bit.edu` | Browse, Register, Give Feedback |
 
 ---
 
 ## Features
 
 ### Admin
-- Dashboard with platform-wide stats
-- **Analytics** — revenue bar charts, registration breakdown, department stats, feedback radar chart
+- Dashboard with platform-wide statistics
+- **Analytics** — revenue bar charts, registration breakdowns, department stats, feedback radar chart
 - Approve or reject faculty-submitted events
 - Download branded PDF reports per event
 
@@ -153,21 +85,29 @@ All demo accounts use the password: **`password123`**
 
 ---
 
+## Tech Stack
+
+| Layer | Technology |
+|---|---|
+| Frontend | React + Vite, Tailwind CSS, Recharts |
+| Backend | Node.js + Express, TypeScript |
+| Database | PostgreSQL (Drizzle ORM) |
+| Auth | JWT |
+| PDF Reports | PDFKit |
+
+---
+
 ## Project Structure
 
 ```
 bit-event-project/
+├── setup.ps1                # One-command Windows setup (run once)
+├── start.ps1                # Daily launcher (generated by setup.ps1)
 ├── artifacts/
-│   ├── api-server/          # Express + TypeScript backend
-│   │   └── src/routes/      # auth, events, registrations, reports, analytics
-│   └── bit-events/          # React + Vite frontend
-│       └── src/
-│           ├── pages/       # admin/, faculty/, student/, auth/
-│           └── components/  # layout, reusable UI
+│   ├── api-server/          # Express + TypeScript backend (port 8080)
+│   └── bit-events/          # React + Vite frontend (port 3000)
 ├── lib/
-│   ├── db/                  # Drizzle ORM schema & config
-│   ├── api-zod/             # Zod validation schemas
-│   └── api-client-react/    # React Query API hooks
+│   └── db/                  # Drizzle ORM schema & migrations
 └── scripts/
     └── seed.mjs             # Demo data seeder
 ```
@@ -178,13 +118,13 @@ bit-event-project/
 
 | Problem | Fix |
 |---|---|
-| `PORT is required` error | Set the `PORT` env variable before running (see above) |
-| `DATABASE_URL` error | Make sure PostgreSQL is running and the URL is correct |
-| `relation "users" does not exist` | Run `pnpm --filter @workspace/db run push` |
-| Frontend shows blank / white page | Make sure both servers are running |
-| PDF won't open | Use a modern browser (Chrome, Edge, Firefox) |
-| Login / register fails | Confirm the API server is running on port 8080 |
-| `Cannot find module` on startup | Run `pnpm install` again |
+| `cannot be loaded because running scripts is disabled` | Run: `Set-ExecutionPolicy -Scope Process -ExecutionPolicy Bypass` |
+| `PostgreSQL not found` | Make sure PostgreSQL is installed and try restarting VS Code |
+| `password authentication failed` | Re-run `.\setup.ps1` with the correct password |
+| `relation "users" does not exist` | Run: `pnpm --filter @workspace/db run push` |
+| Frontend shows blank page | Make sure both PowerShell windows (from `start.ps1`) are still running |
+| Login fails | Check that the API server window (port 8080) is running without errors |
+| Port already in use | Close any other terminals running the servers and run `.\start.ps1` again |
 
 ---
 
