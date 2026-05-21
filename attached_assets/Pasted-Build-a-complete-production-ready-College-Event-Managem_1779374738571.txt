@@ -1,0 +1,44 @@
+Build a complete, production-ready College Event Management System tailored for "Bangalore Institute of Technology (BIT)" with a specific focus on the "Computer Science & Engineering - IoT, Cybersecurity, & Blockchain (CSE-ICB)" department. 
+
+Architecture & Tech Stack:
+- Frontend: React (Vite), Tailwind CSS, React Router, Axios, Lucide React Icons
+- Backend: Python (Flask), Flask-SQLAlchemy (SQLite database), Flask-JWT-Extended (Auth)
+- Utilities: Flask-CORS, Flask-Mail (Email notifications), ReportLab (PDF generation)
+
+Institutional Branding & UI Style Guide:
+- Theme: Professional Academic Portal for Bangalore Institute of Technology.
+- Color Palette: Deep Navy Blue (Primary), Rich Gold (Accent), Crisp White/Light Gray (Backgrounds).
+- Header Navbar: Must include a placeholder for the BIT logo ("assets/bit_logo.png") alongside the text "Bangalore Institute of Technology - Event Portal".
+- Department Options: 'CSE-ICB' (default/primary), 'CSE', 'ISE', 'ECE', 'AI&ML', 'ME', 'CV'.
+
+Database Schema (Flask-SQLAlchemy Models):
+1. User: id, name, email, password_hash, role ('admin', 'faculty', 'student'), department, created_at.
+2. Event: id, title, description, date, time, venue, image_url, rules, registration_fee (Integer, 0 for free), total_slots, available_slots, created_by_faculty_id, status ('pending', 'approved').
+3. Registration: id, event_id, student_id, payment_screenshot_url, payment_status ('pending', 'approved', 'rejected'), admin_comment (Text field for faculty review feedback remarks), registered_at.
+4. Feedback: id, event_id, student_id, ratings (1-5), comments, custom_responses (JSON text block for dynamic questions).
+
+Core Features to Implement Fully:
+
+1. Role-Based Authentication & Navigation:
+   - Separate login/registration workflows.
+   - Enforce route protection: Students must never see Faculty/Admin tools.
+   - Store JWT tokens securely and attach them to all Axios API requests.
+
+2. Faculty Dashboard & Event Management:
+   - Form to create events with fields for title, rules, fee, date, and banner image upload (saved locally to a static upload folder).
+   - Events default to 'pending' until an Admin or designated faculty approves them.
+   - Dedicated "Review Registrations" panel displaying student applications along with their uploaded transaction screenshots.
+   - CRITICAL FACULTY FLOW: When approving/rejecting a registration, Faculty must be able to type a text remark. The backend must save this to the `admin_comment` field in the database. If approved, automatically decrement the event's `available_slots`.
+
+3. Student Feed & Dynamic Comment Display:
+   - Main Explorer page showing approved events, sorted dynamically with a prominent quick-filter button pinned for 'CSE-ICB' events.
+   - Registration flow: For paid events, display a modal with the Faculty's payment QR code and a file upload element for the transaction screenshot.
+   - "My Signups" Dashboard: List all events the student registered for. 
+     * If the registration status is 'rejected', display the 'admin_comment' field prominently inside a red, styled banner alerting the student exactly why (e.g., "Transaction ID invalid").
+     * If status is 'approved', display the faculty comment inside a green confirmation box.
+
+4. Email Alerts & Official PDF Report Generation:
+   - Use Flask-Mail to dispatch automated notification emails to the student when their registration is marked 'approved' or 'rejected', containing the faculty's comment.
+   - Use ReportLab to build an endpoint `/api/reports/event/<int:event_id>` that outputs a beautifully structured institutional PDF report. The header must state "BANGALORE INSTITUTE OF TECHNOLOGY - Department of CSE-ICB", followed by event metrics (revenue, attendance) and a complete grid table of registered students.
+
+Build the entire workspace. Do not use code stubs, shorthand notations, or '// TODO' shortcuts. Ensure the backend and frontend talk to each other seamlessly over Replit's internal network proxy.

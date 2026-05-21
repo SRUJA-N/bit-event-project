@@ -1,0 +1,31 @@
+kind = "web"
+previewPath = "/"
+title = "BIT Event Portal"
+version = "1.0.0"
+id = "artifacts/bit-events"
+router = "path"
+
+[[integratedSkills]]
+name = "react-vite"
+version = "1.0.0"
+
+[[services]]
+name = "web"
+paths = [ "/" ]
+localPort = 23589
+
+[services.development]
+run = "pnpm --filter @workspace/bit-events run dev"
+
+[services.production]
+build = [ "pnpm", "--filter", "@workspace/bit-events", "run", "build" ]
+publicDir = "artifacts/bit-events/dist/public"
+serve = "static"
+
+[[services.production.rewrites]]
+from = "/*"
+to = "/index.html"
+
+[services.env]
+PORT = "23589"
+BASE_PATH = "/"
