@@ -6,9 +6,9 @@ import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/com
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { Badge } from "@/components/ui/badge";
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } from "@/components/ui/dialog";
-import { Loader2, Download, FileText, IndianRupee, Users } from "lucide-react";
+import { Loader, Loader2, Download, FileText, IndianRupee, Users } from "lucide-react";
 import { format } from "date-fns";
-import type { EventReport } from "@workspace/api-client-react/src/generated/api.schemas";
+import type { EventReport } from "@workspace/api-client-react";
 
 export function AdminReports() {
   const { token } = useAuth();

@@ -10,9 +10,9 @@ import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, D
 import { Label } from "@/components/ui/label";
 import { useToast } from "@/hooks/use-toast";
 import { useQueryClient } from "@tanstack/react-query";
-import { ArrowLeft, Loader2, Check, X, ExternalLink } from "lucide-react";
+import { ArrowLeft, Loader, Loader2, Check, X, ExternalLink } from "lucide-react";
 import { format } from "date-fns";
-import type { Registration } from "@workspace/api-client-react/src/generated/api.schemas";
+import type { Registration } from "@workspace/api-client-react";
 
 export function ReviewRegistrations() {
   const [, params] = useRoute("/faculty/events/:id/registrations");

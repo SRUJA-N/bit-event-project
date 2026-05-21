@@ -8,7 +8,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { useToast } from "@/hooks/use-toast";
 import { useQueryClient } from "@tanstack/react-query";
-import { Loader2, Search, Check, X } from "lucide-react";
+import { Loader, Loader2, Search, Check, X } from "lucide-react";
 import { format } from "date-fns";
 
 export function AdminEvents() {

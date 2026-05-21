@@ -3,7 +3,7 @@ import { useGetEventStats, getGetEventStatsQueryKey, useListEvents, getListEvent
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
-import { Calendar, Users, IndianRupee, Activity, Clock3, LayoutDashboard } from "lucide-react";
+import { Calendar, Users, IndianRupee, Activity, Clock, Clock3, LayoutDashboard } from "lucide-react";
 import { format } from "date-fns";
 
 export function AdminDashboard() {

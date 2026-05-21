@@ -5,7 +5,7 @@ import { Badge } from "@/components/ui/badge";
 import { Skeleton } from "@/components/ui/skeleton";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { Button } from "@/components/ui/button";
-import { Calendar, Clock, MapPin, ExternalLink, AlertCircle, CheckCircle2, Clock3 } from "lucide-react";
+import { Calendar, Clock, MapPin, ExternalLink, AlertCircle, CheckCircle, CheckCircle2, Clock3 } from "lucide-react";
 import { format } from "date-fns";
 
 export function MyRegistrations() {
