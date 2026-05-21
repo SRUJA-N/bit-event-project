@@ -93,7 +93,13 @@ router.post("/registrations", requireAuth, requireRole("student"), async (req, r
     paymentStatus: "pending",
   }).returning();
 
-  res.status(201).json(formatReg(reg, event));
+  // Decrement slot immediately on registration so overbooking is prevented
+  await db.update(eventsTable)
+    .set({ availableSlots: event.availableSlots - 1 })
+    .where(eq(eventsTable.id, event.id));
+
+  const [updatedEvent] = await db.select().from(eventsTable).where(eq(eventsTable.id, event.id));
+  res.status(201).json(formatReg(reg, updatedEvent));
 });
 
 router.get("/registrations/my", requireAuth, requireRole("student"), async (req, res): Promise<void> => {
@@ -130,13 +136,13 @@ router.patch("/registrations/:id/review", requireAuth, requireRole("admin", "fac
     adminComment: parsed.data.adminComment ?? null,
   }).where(eq(registrationsTable.id, params.data.id)).returning();
 
-  if (parsed.data.paymentStatus === "approved" && existing.paymentStatus !== "approved") {
-    await db.update(eventsTable)
-      .set({ availableSlots: eventsTable.availableSlots })
-      .where(eq(eventsTable.id, reg.eventId));
+  // If rejected, give the slot back so another student can register
+  if (parsed.data.paymentStatus === "rejected" && existing.paymentStatus !== "rejected") {
     const [evt] = await db.select().from(eventsTable).where(eq(eventsTable.id, reg.eventId));
-    if (evt && evt.availableSlots > 0) {
-      await db.update(eventsTable).set({ availableSlots: evt.availableSlots - 1 }).where(eq(eventsTable.id, evt.id));
+    if (evt) {
+      await db.update(eventsTable)
+        .set({ availableSlots: evt.availableSlots + 1 })
+        .where(eq(eventsTable.id, evt.id));
     }
   }
 
