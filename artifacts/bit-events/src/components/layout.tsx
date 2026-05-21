@@ -74,6 +74,12 @@ export function Layout({ children }: { children: React.ReactNode }) {
                       All Events
                     </Link>
                     <Link 
+                      href="/admin/analytics" 
+                      className={`text-sm font-medium transition-colors hover:text-accent ${location.startsWith('/admin/analytics') ? 'text-accent' : 'text-primary-foreground/80'}`}
+                    >
+                      Analytics
+                    </Link>
+                    <Link 
                       href="/admin/reports" 
                       className={`text-sm font-medium transition-colors hover:text-accent ${location.startsWith('/admin/reports') ? 'text-accent' : 'text-primary-foreground/80'}`}
                     >

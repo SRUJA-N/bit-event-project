@@ -17,6 +17,7 @@ import { ReviewRegistrations } from "@/pages/faculty/review-registrations";
 import { AdminDashboard } from "@/pages/admin/dashboard";
 import { AdminEvents } from "@/pages/admin/events";
 import { AdminReports } from "@/pages/admin/reports";
+import { AdminAnalytics } from "@/pages/admin/analytics";
 import NotFound from "@/pages/not-found";
 
 const queryClient = new QueryClient();
@@ -81,6 +82,7 @@ function Router() {
       <Route path="/admin/dashboard" component={() => <ProtectedRoute component={AdminDashboard} allowedRoles={['admin']} />} />
       <Route path="/admin/events" component={() => <ProtectedRoute component={AdminEvents} allowedRoles={['admin']} />} />
       <Route path="/admin/reports" component={() => <ProtectedRoute component={AdminReports} allowedRoles={['admin']} />} />
+      <Route path="/admin/analytics" component={() => <ProtectedRoute component={AdminAnalytics} allowedRoles={['admin']} />} />
       
       <Route component={NotFound} />
     </Switch>

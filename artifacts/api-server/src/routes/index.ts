@@ -6,6 +6,7 @@ import registrationsRouter from "./registrations";
 import feedbackRouter from "./feedback";
 import uploadsRouter from "./uploads";
 import reportsRouter from "./reports";
+import analyticsRouter from "./analytics";
 
 const router: IRouter = Router();
 
@@ -16,5 +17,6 @@ router.use(registrationsRouter);
 router.use(feedbackRouter);
 router.use(uploadsRouter);
 router.use(reportsRouter);
+router.use(analyticsRouter);
 
 export default router;
