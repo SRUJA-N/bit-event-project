@@ -1,6 +1,8 @@
 import { createContext, useContext, useEffect, useState, ReactNode } from "react";
 import { useGetMe, setAuthTokenGetter } from "@workspace/api-client-react";
 import type { User } from "@workspace/api-client-react";
+import { useQueryClient } from "@tanstack/react-query";
+import { useLocation } from "wouter";
 
 interface AuthContextType {
   user: User | null;
@@ -14,8 +16,9 @@ const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
 export function AuthProvider({ children }: { children: ReactNode }) {
   const [token, setToken] = useState<string | null>(localStorage.getItem("auth_token"));
-  
-  // Set the token getter for the API client
+  const queryClient = useQueryClient();
+  const [, setLocation] = useLocation();
+
   useEffect(() => {
     setAuthTokenGetter(() => localStorage.getItem("auth_token"));
   }, []);
@@ -27,7 +30,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     }
   });
 
-  const handleLogin = (newToken: string, newUser: User) => {
+  const handleLogin = (newToken: string, _newUser: User) => {
     localStorage.setItem("auth_token", newToken);
     setToken(newToken);
   };
@@ -35,9 +38,10 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   const handleLogout = () => {
     localStorage.removeItem("auth_token");
     setToken(null);
+    queryClient.clear();
+    setLocation("/login");
   };
 
-  // If token is invalid, clear it
   useEffect(() => {
     if (error) {
       handleLogout();
@@ -46,11 +50,11 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 
   return (
     <AuthContext.Provider value={{
-      user: user ?? null,
+      user: token ? (user ?? null) : null,
       token,
       login: handleLogin,
       logout: handleLogout,
-      isLoading,
+      isLoading: !!token && isLoading,
     }}>
       {children}
     </AuthContext.Provider>
