@@ -1,5 +1,5 @@
-import { useState } from "react";
 import { useLocation, Link } from "wouter";
+import bitLogo from "@assets/bit_logo.png_1779374905037.png";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import * as z from "zod";
@@ -65,11 +65,10 @@ export function Login() {
     <div className="flex min-h-screen items-center justify-center bg-muted/20 p-4">
       <div className="w-full max-w-md">
         <div className="mb-8 text-center">
-          <div className="mx-auto mb-4 flex h-16 w-16 items-center justify-center rounded-lg bg-primary text-accent text-2xl font-bold">
-            BIT
-          </div>
+          <img src={bitLogo} alt="Bangalore Institute of Technology" className="mx-auto mb-4 h-24 w-24 object-contain" />
           <h1 className="text-3xl font-bold tracking-tight text-primary">BIT Event Portal</h1>
-          <p className="mt-2 text-muted-foreground">Sign in to your account</p>
+          <p className="mt-1 text-sm font-medium text-muted-foreground uppercase tracking-widest">CSE-ICB Department</p>
+          <p className="mt-1 text-muted-foreground">Sign in to your account</p>
         </div>
 
         <Card className="border-t-4 border-t-accent shadow-lg">

@@ -1,6 +1,7 @@
 import { Link, useLocation } from "wouter";
 import { useAuth } from "@/lib/auth";
 import { Button } from "@/components/ui/button";
+import bitLogo from "@assets/bit_logo.png_1779374905037.png";
 
 export function Layout({ children }: { children: React.ReactNode }) {
   const { user, logout } = useAuth();
@@ -15,10 +16,8 @@ export function Layout({ children }: { children: React.ReactNode }) {
       <header className="sticky top-0 z-50 w-full border-b bg-primary text-primary-foreground shadow-sm">
         <div className="container mx-auto flex h-16 items-center justify-between px-4">
           <div className="flex items-center gap-4">
-            <Link href="/" className="flex items-center gap-2 font-bold text-lg hover:text-accent transition-colors">
-              <div className="w-8 h-8 bg-accent rounded flex items-center justify-center text-primary font-bold">
-                BIT
-              </div>
+            <Link href="/" className="flex items-center gap-3 font-bold text-lg hover:text-accent transition-colors">
+              <img src={bitLogo} alt="BIT Logo" className="h-10 w-10 object-contain bg-white rounded-full p-0.5" />
               Bangalore Institute of Technology — Event Portal
             </Link>
           </div>
